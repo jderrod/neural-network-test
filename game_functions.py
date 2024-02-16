@@ -1,6 +1,6 @@
 # game_functions.py
-import pygame
 import sys
+import pygame
 from settings import dot_speed
 
 def check_events(dot):
@@ -27,13 +27,13 @@ def update_dot_direction(dot, key, is_key_down):
 
 def update_dot_position(dot):
     """Update the dot's position based on movement flags."""
-    if dot.moving_up:
+    if dot.moving_up and dot.y - dot.size > 0:
         dot.y -= dot_speed
-    if dot.moving_down:
+    if dot.moving_down and dot.y + dot.size < dot.screen_height:
         dot.y += dot_speed
-    if dot.moving_left:
+    if dot.moving_left and dot.x - dot.size > 0:
         dot.x -= dot_speed
-    if dot.moving_right:
+    if dot.moving_right and dot.x + dot.size < dot.screen_width:
         dot.x += dot_speed
 
 def check_collision(dot, food):
@@ -42,3 +42,29 @@ def check_collision(dot, food):
     if distance < dot.size + food.size:
         return True
     return False
+
+def update_dot_direction_nn(dot, action):
+    """
+    Update the dot's movement direction based on the neural network's output.
+    
+    :param dot: The dot object to update.
+    :param action: The action determined by the neural network (0: up, 1: down, 2: left, 3: right).
+    """
+    # Reset any previous movement
+    dot.moving_up = dot.moving_down = dot.moving_left = dot.moving_right = False
+
+    if action == 0:  # Up
+        dot.moving_up = True
+    elif action == 1:  # Down
+        dot.moving_down = True
+    elif action == 2:  # Left
+        dot.moving_left = True
+    elif action == 3:  # Right
+        dot.moving_right = True
+
+    update_dot_position(dot)
+    # Since dot is updated in place, we technically don't need to return it,
+    # but doing so can make the function's effect more explicit.
+    return dot
+
+

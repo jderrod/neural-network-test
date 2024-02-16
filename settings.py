@@ -10,7 +10,7 @@ RED = (255, 0, 0)
 
 # Dot settings
 dot_size = 10
-dot_speed = 1  # Adjusted for slower movement
+dot_speed = .5
 
 # Food settings
 food_size = 10
